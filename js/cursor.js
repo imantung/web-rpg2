@@ -8,7 +8,7 @@ class Cursor{
   create(scene){
     this.marker = scene.add.graphics();
     this.marker.lineStyle(3, 0xffffff, 1);
-    this.marker.strokeRect(0, 0, Game.map.tileWidth, Game.map.tileHeight);
+    this.marker.strokeRect(0, 0, this.tileSize, this.tileSize);
   }
   
   // setState(state){
