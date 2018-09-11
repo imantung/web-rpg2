@@ -3,11 +3,13 @@ const TILE_SIZE = 32;
 var Game = {};
 var cursor = new Cursor(TILE_SIZE);
 var world = new World('assets/gridtiles.png', 'assets/map.json');
+var player = new Player('assets/phaserguy.png', TILE_SIZE)
 
 Game.preload = function() {
   Game.scene = this; 
-  this.load.image('phaserguy', 'assets/phaserguy.png');
-
+  // this.load.image('phaserguy', 'assets/phaserguy.png');
+  
+  player.preload(this)
   world.preload(this)
 };
 
@@ -15,18 +17,14 @@ Game.create = function() {
   // Handles the clicks on the map to make the character move
   this.input.on('pointerup', Game.handleClick);
 
+  player.create(this);
+  world.create(this);
+  cursor.create(this);
+  
   Game.camera = this.cameras.main;
   Game.camera.setBounds(0, 0, 20 * TILE_SIZE, 20 * TILE_SIZE);
-
-  var phaserGuy = this.add.image(TILE_SIZE, TILE_SIZE, 'phaserguy');
-  phaserGuy.setDepth(1);
-  phaserGuy.setOrigin(0, 0.5);
-
-  Game.camera.startFollow(phaserGuy);
-  Game.player = phaserGuy;
-
-  world.create(this)
-  cursor.create(this)
+  
+  player.followMe(Game.camera)
 };
 
 Game.update = function() {
@@ -46,8 +44,10 @@ Game.handleClick = function(pointer) {
   var y = Game.camera.scrollY + pointer.y;
   var toX = Math.floor(x / TILE_SIZE);
   var toY = Math.floor(y / TILE_SIZE);
-  var fromX = Math.floor(Game.player.x / TILE_SIZE);
-  var fromY = Math.floor(Game.player.y / TILE_SIZE);
+  
+  var fromX = Math.floor(player.getX() / TILE_SIZE);
+  var fromY = Math.floor(player.getY() / TILE_SIZE);
+  
 
   console.log('going from (' + fromX + ',' + fromY + ') to (' + toX + ',' + toY + ')');
 
@@ -55,31 +55,8 @@ Game.handleClick = function(pointer) {
     if (path === null) {
       console.warn("Path was not found.");
     } else {
-      Game.moveCharacter(path);
+      player.move(Game.scene, path)
     }
   });
   world.finder.calculate(); // don't forget, otherwise nothing happens
-};
-
-Game.moveCharacter = function(path) {
-  console.log("meh")
-
-  var tweens = [];
-  for (var i = 0; i < path.length - 1; i++) {
-    var ex = path[i + 1].x;
-    var ey = path[i + 1].y;
-    tweens.push({
-      targets: Game.player,
-      x: {
-        value: ex * TILE_SIZE,
-        duration: 200
-      },
-      y: {
-        value: ey * TILE_SIZE,
-        duration: 200
-      }
-    });
-  }
-
-  Game.scene.tweens.timeline({tweens: tweens});
 };
