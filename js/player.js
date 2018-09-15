@@ -2,7 +2,7 @@ class Player{
   constructor(charAsset, tileSize){
     this.charAsset = charAsset
     this.tileSize = tileSize;
-    this.movementSpeed = 200;
+    this.movementSpeed = 120;
   }
   
   preload(scene){
@@ -21,12 +21,14 @@ class Player{
     camera.startFollow(this.phaserGuy)
   }
   
+  // return y position of player based on its tile
   getX(){
-    return this.phaserGuy.x
+    return Math.floor(this.phaserGuy.x / this.tileSize);
   }
   
+  // return x position of player based on its tile
   getY(){
-    return this.phaserGuy.y
+    return Math.floor(this.phaserGuy.y / this.tileSize);
   }
   
   move(scene, path){
