@@ -1,14 +1,13 @@
 const TILE_SIZE = 32;
 
-var Game = {};
 var cursor = new Cursor(TILE_SIZE);
 var world = new World('assets/gridtiles.png', 'assets/map.json');
 var player = new Player('assets/phaserguy.png', TILE_SIZE)
-var worldPoint;
+var finder = new EasyStar.js();
 
+var Game = {};
 Game.preload = function() {
   Game.scene = this; 
-  
   player.preload(this)
   world.preload(this)
 };
@@ -27,7 +26,8 @@ Game.create = function() {
   
   player.followMe(Game.camera)
   
-  worldPoint = this.input.activePointer.positionToCamera(this.cameras.main);
+  finder.setGrid(world.getGrid());
+  finder.setAcceptableTiles(world.getAcceptableProperty());
 };
 
 
@@ -59,12 +59,12 @@ Game.onPointerUp = function(pointer) {
 
   console.log('going from (' + fromX + ',' + fromY + ') to (' + toX + ',' + toY + ')');
 
-  world.finder.findPath(fromX, fromY, toX, toY, function(path) {
+  finder.findPath(fromX, fromY, toX, toY, function(path) {
     if (path === null) {
       console.warn("Path was not found.");
     } else {
       player.move(Game.scene, path)
     }
   });
-  world.finder.calculate(); // don't forget, otherwise nothing happens
+  finder.calculate();
 };
