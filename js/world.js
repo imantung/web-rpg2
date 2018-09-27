@@ -10,21 +10,24 @@ class World {
   }
 
   create(scene) {
-    // Display map
     var tilemap = scene.make.tilemap({key: 'map'});
-    var tileset = map.addTilesetImage('tiles', 'tileset');
-    map.createStaticLayer(0, tileset, 0, 0);
+    var tileset = tilemap.addTilesetImage('tiles', 'tileset');
+    tilemap.createStaticLayer(0, tileset, 0, 0);
+    
+    var camera = scene.cameras.main;
+    camera.setBounds(0, 0, 20 * TILE_SIZE, 20 * TILE_SIZE);
     
     this.tilemap = tilemap;
     this.tileset = tileset;
+    this.camera = camera;  
   }
   
   tileX(x){
-    return this.tilemap.worldToTileX(x)
+    return this.tilemap.worldToTileX(this.camera.scrollX + x)
   }
   
   tileY(y){
-    return this.tilemap.worldToTileY(y)
+    return this.tilemap.worldToTileY(this.camera.scrollY +y)
   }
   
   getTileAt(tileX, tileY){
@@ -34,6 +37,10 @@ class World {
   isCollisionTile(tileX, tileY){
     var tile = this.getTileAt(tileX, tileY);
     return tile.properties.collide;
+  }
+  
+  startFollow(obj){
+    this.camera.startFollow(this.phaserGuy)
   }
   
   // 2D array representing all the tiles of our map

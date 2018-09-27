@@ -14,6 +14,7 @@ class Player{
     phaserGuy.setDepth(1);
     phaserGuy.setOrigin(0, 0.5);
     
+    // TODO: rename to a better name
     this.phaserGuy = phaserGuy
   }
   
@@ -22,12 +23,12 @@ class Player{
   }
   
   // return y position of player based on its tile
-  getX(){
+  getTileX(){
     return Math.floor(this.phaserGuy.x / this.tileSize);
   }
   
   // return x position of player based on its tile
-  getY(){
+  getTileY(){
     return Math.floor(this.phaserGuy.y / this.tileSize);
   }
   

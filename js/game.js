@@ -21,25 +21,17 @@ Game.create = function() {
   world.create(this);
   cursor.create(this);
   
-  Game.camera = this.cameras.main;
-  Game.camera.setBounds(0, 0, 20 * TILE_SIZE, 20 * TILE_SIZE);
-  
-  player.followMe(Game.camera)
-  
   finder.setGrid(world.getGrid());
   finder.setAcceptableTiles(world.getAcceptableProperty());
 };
 
-
 Game.update = function() {
+  
 };
 
 Game.onPointerMove = function(pointer){
-  var x = Game.camera.scrollX + pointer.x;
-  var y = Game.camera.scrollY + pointer.y;
-  
-  var tileX = world.tileX(x);
-  var tileY = world.tileY(y);
+  var tileX = world.tileX(pointer.x);
+  var tileY = world.tileY(pointer.y);
   
   cursor.setX(tileX * TILE_SIZE)
   cursor.setY(tileY * TILE_SIZE)
@@ -47,15 +39,11 @@ Game.onPointerMove = function(pointer){
 };
 
 Game.onPointerUp = function(pointer) {
-  var x = Game.camera.scrollX + pointer.x;
-  var y = Game.camera.scrollY + pointer.y;
+  var toX = world.tileX(pointer.x);
+  var toY = world.tileY(pointer.y);
   
-  var toX = world.tileX(x);
-  var toY = world.tileY(y);
-  
-  var fromX = player.getX()
-  var fromY = player.getY()
-  
+  var fromX = player.getTileX()
+  var fromY = player.getTileY()
 
   console.log('going from (' + fromX + ',' + fromY + ') to (' + toX + ',' + toY + ')');
 
