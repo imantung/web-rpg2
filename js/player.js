@@ -18,10 +18,6 @@ class Player{
     this.phaserGuy = phaserGuy
   }
   
-  followMe(camera){
-    camera.startFollow(this.phaserGuy)
-  }
-  
   // return y position of player based on its tile
   getTileX(){
     return Math.floor(this.phaserGuy.x / this.tileSize);
