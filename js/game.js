@@ -1,6 +1,5 @@
 const TILE_SIZE = 32;
 
-var cursor = new Cursor(TILE_SIZE);
 var world = new World('assets/gridtiles.png', 'assets/map.json');
 var player = new Player('assets/phaserguy.png', TILE_SIZE)
 var finder = new EasyStar.js();
@@ -19,7 +18,6 @@ Game.create = function() {
 
   player.create(this);
   world.create(this);
-  cursor.create(this);
   
   finder.setGrid(world.getGrid());
   finder.setAcceptableTiles(world.getAcceptableProperty());
@@ -30,12 +28,7 @@ Game.update = function() {
 };
 
 Game.onPointerMove = function(pointer){
-  var tileX = world.tileX(pointer.x);
-  var tileY = world.tileY(pointer.y);
-  
-  cursor.setX(tileX * TILE_SIZE)
-  cursor.setY(tileY * TILE_SIZE)
-  cursor.setVisible(!world.isCollisionTile(tileX, tileY))
+  world.setCursor(pointer.x, pointer.y)
 };
 
 Game.onPointerUp = function(pointer) {

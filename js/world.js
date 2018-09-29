@@ -10,16 +10,24 @@ class World {
   }
 
   create(scene) {
+    // prepare title
     var tilemap = scene.make.tilemap({key: 'map'});
     var tileset = tilemap.addTilesetImage('tiles', 'tileset');
     tilemap.createStaticLayer(0, tileset, 0, 0);
     
+    // set camera
     var camera = scene.cameras.main;
     camera.setBounds(0, 0, 20 * TILE_SIZE, 20 * TILE_SIZE);
+    
+    // add cursor
+    var cursor = scene.add.graphics();
+    cursor.lineStyle(3, 0xffffff, 1);
+    cursor.strokeRect(0, 0, TILE_SIZE, TILE_SIZE);
     
     this.tilemap = tilemap;
     this.tileset = tileset;
     this.camera = camera;  
+    this.cursor = cursor;
   }
   
   tileX(x){
@@ -41,6 +49,15 @@ class World {
   
   startFollow(obj){
     this.camera.startFollow(this.phaserGuy)
+  }
+  
+  setCursor(x,y){
+    var tileX = this.tileX(x);
+    var tileY = this.tileY(y);
+    
+    this.cursor.setX(tileX * TILE_SIZE)
+    this.cursor.setY(tileY * TILE_SIZE)
+    this.cursor.setVisible(!this.isCollisionTile(tileX, tileY))
   }
   
   // 2D array representing all the tiles of our map
