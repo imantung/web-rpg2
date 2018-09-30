@@ -1,7 +1,7 @@
 class Player{
-  constructor(charAsset, tileSize){
+    
+  constructor(charAsset){
     this.charAsset = charAsset
-    this.tileSize = tileSize;
     this.movementSpeed = 120;
   }
   
@@ -10,7 +10,7 @@ class Player{
   }
   
   create(scene){
-    var phaserGuy = scene.add.image(this.tileSize, this.tileSize, 'phaserguy');
+    var phaserGuy = scene.add.image(TILE_SIZE, TILE_SIZE, 'phaserguy');
     phaserGuy.setDepth(1);
     phaserGuy.setOrigin(0, 0.5);
     
@@ -19,34 +19,29 @@ class Player{
   }
   
   // return y position of player based on its tile
-  getTileX(){
-    return Math.floor(this.phaserGuy.x / this.tileSize);
+  // TODO: consider to store tilex in this class itself
+  getTx(){
+    return Math.floor(this.phaserGuy.x / TILE_SIZE);
   }
   
   // return x position of player based on its tile
-  getTileY(){
-    return Math.floor(this.phaserGuy.y / this.tileSize);
+  getTy(){
+    return Math.floor(this.phaserGuy.y / TILE_SIZE);
   }
   
-  move(scene, path){
-    var tweens = [];
-    for (var i = 0; i < path.length - 1; i++) {
-      var ex = path[i + 1].x;
-      var ey = path[i + 1].y;
-      tweens.push({
-        targets: this.phaserGuy,
-        x: {
-          value: ex * this.tileSize,
-          duration: this.movementSpeed
-        },
-        y: {
-          value: ey * this.tileSize,
-          duration: this.movementSpeed
-        }
-      });
+  createTween(x,y){
+    return {
+      targets: this.phaserGuy,
+      x: {
+        value: x * TILE_SIZE,
+        duration: this.movementSpeed
+      },
+      y: {
+        value: y * TILE_SIZE,
+        duration: this.movementSpeed
+      }
     }
-    
-    scene.tweens.timeline({tweens: tweens});
   }
+
 
 }

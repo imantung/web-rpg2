@@ -23,27 +23,35 @@ class World {
     var cursor = scene.add.graphics();
     cursor.lineStyle(3, 0xffffff, 1);
     cursor.strokeRect(0, 0, TILE_SIZE, TILE_SIZE);
+    cursor.setVisible(false)
     
+    // add marker
+    var marker = scene.add.graphics();
+    marker.lineStyle(3, 0xff0000, 1);
+    marker.strokeRect(0, 0, TILE_SIZE, TILE_SIZE);
+    marker.setVisible(false)
+    
+    this.marker = marker;
     this.tilemap = tilemap;
     this.tileset = tileset;
     this.camera = camera;  
     this.cursor = cursor;
   }
   
-  tileX(x){
+  toTx(x){
     return this.tilemap.worldToTileX(this.camera.scrollX + x)
   }
   
-  tileY(y){
+  toTy(y){
     return this.tilemap.worldToTileY(this.camera.scrollY +y)
   }
   
-  getTileAt(tileX, tileY){
-    return this.tilemap.getTileAt(tileX, tileY);
+  getTileAt(tx, ty){
+    return this.tilemap.getTileAt(tx, ty);
   }
   
-  isCollisionTile(tileX, tileY){
-    var tile = this.getTileAt(tileX, tileY);
+  isCollisionTile(tx, ty){
+    var tile = this.getTileAt(tx, ty);
     return tile.properties.collide;
   }
   
@@ -51,13 +59,20 @@ class World {
     this.camera.startFollow(this.phaserGuy)
   }
   
-  setCursor(x,y){
-    var tileX = this.tileX(x);
-    var tileY = this.tileY(y);
-    
-    this.cursor.setX(tileX * TILE_SIZE)
-    this.cursor.setY(tileY * TILE_SIZE)
-    this.cursor.setVisible(!this.isCollisionTile(tileX, tileY))
+  setCursor(tx,ty){
+    this.cursor.setX(tx * TILE_SIZE)
+    this.cursor.setY(ty * TILE_SIZE)
+    this.cursor.setVisible(!this.isCollisionTile(tx, ty))
+  }
+  
+  setMarker(tx,ty){
+    this.marker.setX(tx * TILE_SIZE)
+    this.marker.setY(ty * TILE_SIZE)  
+    this.marker.setVisible(true)
+  }
+  
+  hideMarker(){
+    this.marker.setVisible(false)
   }
   
   // 2D array representing all the tiles of our map
